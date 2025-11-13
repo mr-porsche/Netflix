@@ -5,6 +5,7 @@ import Banner_Title from '../../assets/title.png';
 import Play_Button from '../../assets/play_icon.png';
 import Info_Button from '../../assets/info_icon.png';
 import TitleCards from '../../components/TitleCards/TitleCards';
+import Footer from '../../components/Footer/Footer';
 
 const Home = () => {
   return (
@@ -28,6 +29,7 @@ const Home = () => {
         <TitleCards title={"Upcoming"} />
         <TitleCards title={"Top Pics for You"} />
       </div>
+      <Footer />
     </div>
   )
 }

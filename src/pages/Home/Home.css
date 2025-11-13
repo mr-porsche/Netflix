@@ -59,3 +59,7 @@
 .more-cards {
     padding-left: 6%;
 }
+
+.banner::-webkit-scrollbar {
+    display: none;
+}
