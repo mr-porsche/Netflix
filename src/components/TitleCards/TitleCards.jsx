@@ -1,0 +1,33 @@
+import './TitleCards.css';
+import cards_data from '../../assets/cards/cards_data.js';
+import { useEffect, useRef } from 'react';
+
+const TitleCards = () => {
+  const cardsRef = useRef();
+  
+  
+  const handleScroll = (e)=> {
+    e.preventDefault();
+    cardsRef.current.scrollLeft += e.deltaY;
+  } ;
+  
+  useEffect(() => {
+    cardsRef.current.addEventListener('wheel', handleScroll);
+  }, []);
+
+  return (
+    <div className='cards'>
+      <h2>Popular on Netflix</h2>
+      <div className="card-list" ref={cardsRef}>
+        {cards_data.map((card, index) => {
+          return <div className='card' key={index}>
+            <img src={card.image} alt="card-image" />
+            <p>{card.name}</p>
+          </div>
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default TitleCards;
