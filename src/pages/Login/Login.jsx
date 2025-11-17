@@ -1,9 +1,22 @@
 import './Login.css';
 import Logo from '../../assets/logo.png';
 import { useState } from 'react';
+import { signin, signup } from '../../firebase';
 
 const Login = () => {
   const [isLogin, setIsLogin] =useState('Sign In');
+  const [name, setName] =useState('');
+  const [email, setEmail] =useState('');
+  const [password, setPassword] =useState('');
+
+  const userAuth = async (e)=> {
+    e.preventDefault();
+    if (isLogin === 'Sign In') {
+      await signin(email, password);
+    } else {
+      await signup(name, email, password);
+    }
+  };
 
   return (
     <div className='login'>
@@ -13,12 +26,18 @@ const Login = () => {
         <form>
           {
             isLogin === 'Sign Up'
-              ? <input type='text' placeholder='Your Name' />
+              ? <input type='text' value={name} placeholder='Your Name'
+                  onChange={(e)=> {setName(e.target.value)}}
+                />
               : <></>
           }
-          <input type='email' placeholder='Email' />
-          <input type='password' placeholder='Password' />
-          <button>{isLogin}</button>
+          <input type='email' value={email} placeholder='Email'
+            onChange={(e)=> {setEmail(e.target.value)}}
+          />
+          <input type='password' value={password} placeholder='Password'
+            onChange={(e)=> {setPassword(e.target.value)}}
+          />
+          <button onClick={userAuth} type='submit'>{isLogin}</button>
           <div className='form-help'>
             <div className='remember'>
               <input type='checkbox' />
