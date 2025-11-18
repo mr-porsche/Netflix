@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
             if (currentUser) {
                 const userRef = doc(db, 'user', currentUser.uid);
                 const userSnap = await getDoc(userRef);
-                console.log(currentUser);
 
                 if (userSnap.exists()) {
                     setUser({
