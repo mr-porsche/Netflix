@@ -1,36 +1,47 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
 import Login from './pages/Login/Login.jsx';
 import Player from './pages/Player/Player.jsx';
-import { useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase.js';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PublicRoute from './PublicRoute.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 const App = () => {
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user)=> {
-      if(user) {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
-    });
-  }, []);
-
   return (
-    <div>
+    <>
       <ToastContainer theme='dark' />
+
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/player/:id' element={<Player />} />
+        <Route
+          path='/login'
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path='/'
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/player/:id'
+          element={
+            <PrivateRoute>
+              <Player />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </div>
+    </>
   )
 }
 
