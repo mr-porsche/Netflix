@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, use, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import Loading from '../components/Loading/Loading';
 
 const AuthContext = createContext();
@@ -10,8 +11,30 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (currentUser)=> {
-            setUser(currentUser);
+        const unsub = onAuthStateChanged(auth, async (currentUser)=> {
+            if (currentUser) {
+                const userRef = doc(db, 'user', currentUser.uid);
+                const userSnap = await getDoc(userRef);
+                console.log(currentUser);
+
+                if (userSnap.exists()) {
+                    setUser({
+                        uid: currentUser.uid,
+                        email: currentUser.email,
+                        displayName: currentUser.displayName,
+                        ...userSnap.data()
+                    });
+                } else {
+                    setUser({
+                        uid: currentUser.uid,
+                        email: currentUser.email,
+                        displayName: currentUser.displayName,
+                    });
+                }
+            } else {
+                setUser(null);
+            }
+            
             setLoading(false);
         });
 
